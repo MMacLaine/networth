@@ -1,0 +1,9 @@
+data/
+config.json
+.DS_Store
+imports/
+# Kept on this Mac only: planning notes and the first prototype
+PLAN.md
+prototype/
+.claude/
+1.ps1

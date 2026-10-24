@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Net worth</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">Net worth</div>
+    <nav class="tabs" aria-label="Sections">
+      <button data-go="overview" aria-current="page">Overview</button>
+      <button data-go="update">Update</button>
+      <button data-go="history">History</button>
+      <button data-go="household">Household</button>
+      <button data-go="settings">Settings</button>
+    </nav>
+    <div class="head-right">
+      <span class="last-update" id="last-update"></span>
+      <button class="theme-btn" id="unhide" hidden>Show figures</button>
+    </div>
+  </div>
+</header>
+<div class="demo-bar" id="demo-bar" hidden>
+  <div class="wrap">
+    <span>You are looking at made-up figures for two people. Nothing you change here is kept.</span>
+    <button class="btn small" id="demo-own">Start with a blank page</button>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- Overview -->
+  <section class="view" id="v-overview">
+    <div class="hero">
+      <div>
+        <p class="hero-number" id="hero-number"></p>
+        <div class="hero-lines" id="hero-lines"></div>
+      </div>
+      <div class="hero-controls">
+        <div class="seg" id="home-toggle" role="group" aria-label="Home">
+          <button data-v="with" aria-pressed="true">With the home</button>
+          <button data-v="without" aria-pressed="false">Without the home</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="ov-body">
+    <div class="chart-bar">
+      <div class="seg" id="view-toggle" role="group" aria-label="Chart">
+        <button data-v="total" aria-pressed="true">Total</button>
+        <button data-v="type" aria-pressed="false">By type</button>
+        <button data-v="person" aria-pressed="false">By person</button>
+        <button data-v="reach" aria-pressed="false">Within reach</button>
+      </div>
+      <div class="right">
+        <div class="seg" id="range-toggle" role="group" aria-label="Time range">
+          <button data-v="6" aria-pressed="false">6 months</button>
+          <button data-v="12" aria-pressed="false">1 year</button>
+          <button data-v="all" aria-pressed="true">All</button>
+        </div>
+        <button class="link" id="table-toggle">Show as table</button>
+      </div>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div class="chart" id="main-chart"></div>
+    <div id="main-table" hidden></div>
+    <p class="sub" id="hero-est" style="margin-top:14px" hidden></p>
+
+    <div class="block goal" id="goal-block" hidden></div>
+
+    <div class="block" id="pay-block" hidden>
+      <h2>Against your pay</h2>
+      <p class="sub" id="pay-sub"></p>
+      <div class="stats" id="pay-stats"></div>
+      <p class="sub" id="pay-note" style="margin-top:16px"></p>
+    </div>
+
+    <div class="block">
+      <h2>Owned and owed</h2>
+      <p class="sub">Everything you own above the line, everything you owe below it. Net worth is the gap.</p>
+      <div class="stats" id="owe-stats"></div>
+      <div class="legend" id="owe-legend" style="margin-top:22px"></div>
+      <div class="chart" id="owe-chart" style="margin-top:4px"></div>
+    </div>
+
+    <div class="block" id="ent-block" hidden>
+      <h2>UK State Pension</h2>
+      <p class="sub" id="ent-sub"></p>
+      <div id="ent"></div>
+    </div>
+
+    <div class="block" id="assets-block" hidden>
+      <h2>Asset values</h2>
+      <p class="sub">What the things you own are worth now, against when you first recorded them. Paying off a loan is not counted here, only the value itself.</p>
+      <div id="assets"></div>
+    </div>
+
+    <div class="block">
+      <h2>What moved it</h2>
+      <p class="sub" id="wf-sub"></p>
+      <div class="chart" id="waterfall"></div>
+    </div>
+
+    <div class="block">
+      <h2>Month by month</h2>
+      <p class="sub" id="mm-sub"></p>
+      <div class="chart" id="monthly"></div>
+    </div>
+
+    <div class="split">
+      <div>
+        <h2>What it's made of</h2>
+        <p class="sub">Today, after debts.</p>
+        <div class="bars" id="by-type"></div>
+      </div>
+      <div id="who-holds">
+        <h2>Who holds it</h2>
+        <p class="sub">Joint accounts are shown on their own, not split.</p>
+        <div class="bars" id="by-person"></div>
+      </div>
+    </div>
+
+    <div class="accounts">
+      <div class="accounts-head">
+        <h2>Accounts</h2>
+        <div class="right">
+          <button class="link" id="show-archived"></button>
+          <button class="btn quiet small" data-go="update" data-add="1">Add an account</button>
+        </div>
+      </div>
+      <div id="acc-list"></div>
+    </div>
+    </div>
+  </section>
+
+  <!-- Update -->
+  <section class="view" id="v-update" hidden>
+    <div class="update-head">
+      <div>
+        <h2 style="font-size: var(--step-2)">Update figures</h2>
+        <p class="sub">Type what has changed. Anything left blank keeps its last figure.</p>
+      </div>
+      <label class="rate">Figures as of
+        <input type="date" id="asof" style="width:auto" aria-label="Date these figures are from">
+      </label>
+      <div class="rates" id="rates"></div>
+    </div>
+    <div id="u-list"></div>
+    <div class="add-box">
+      <button class="btn quiet" id="add-open">Add an account</button>
+      <form class="add-form" id="add-form" hidden>
+        <label class="f">Name
+          <input type="text" name="name" placeholder="For example: Avanza ISK" required>
+        </label>
+        <label class="f">Type
+          <select name="type"></select>
+        </label>
+        <label class="f">Provider (optional)
+          <input type="text" name="provider" placeholder="Avanza, Aviva, SEB">
+        </label>
+        <div class="f" style="display:grid;gap:5px;font-size:var(--step--1);color:var(--ink-2)">Whose is it
+          <div class="seg" id="add-owner" role="group" aria-label="Owner"></div>
+        </div>
+        <label class="f">Currency
+          <select name="currency"></select>
+        </label>
+        <div></div>
+        <p class="hint">It appears in the list above, ready for its first figure.</p>
+        <div class="wide">
+          <button type="button" class="btn quiet" id="add-cancel">Cancel</button>
+          <button type="submit" class="btn">Add account</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- History -->
+  <section class="view" id="v-history" hidden>
+    <h2 style="font-size: var(--step-2)">History</h2>
+    <p class="sub">Every time you pressed save. Open one to see what changed, correct a figure or delete it.</p>
+    <div class="h-list" id="h-list"></div>
+  </section>
+  <!-- Household -->
+  <section class="view" id="v-household" hidden>
+    <h2 style="font-size: var(--step-2)">Household</h2>
+    <p class="sub">Insurance, memberships and where the important papers are. Not counted in net worth.</p>
+    <div class="stats" id="hh-stats"></div>
+    <div class="block" style="margin-top:36px">
+      <h2>The usual cover</h2>
+      <p class="sub">What a household with a mortgage in Sweden normally has. Ticked when you have added it below.</p>
+      <div id="hh-check"></div>
+    </div>
+    <div class="block">
+      <h2>What you have</h2>
+      <div id="hh-list"></div>
+      <div class="add-box">
+        <button class="btn quiet" id="hh-add-open">Add insurance or membership</button>
+        <form class="add-form" id="hh-form" hidden>
+          <input type="hidden" name="hid">
+          <label class="f">What it is <select name="kind"></select></label>
+          <label class="f">Provider <input type="text" name="provider" placeholder="For example: Folksam, Unionen"></label>
+          <div class="f" style="display:grid;gap:5px;font-size:var(--step--1);color:var(--ink-2)">Whose is it
+            <div class="seg" id="hh-owner" role="group" aria-label="Owner"></div>
+          </div>
+          <label class="f">Cost a month <span class="money"><input name="cost" inputmode="decimal" placeholder="0"><span class="cur base">kr</span></span></label>
+          <label class="f">What it covers <input type="text" name="cover" placeholder="For example: 1 mn kr, or 80% of pay for 150 days"></label>
+          <label class="f">Renews or ends <input type="date" name="renews"></label>
+          <label class="f" style="grid-column:1 / -1">Notes <input type="text" name="notes" placeholder="Where the papers are, who to call, anything worth knowing"></label>
+          <div class="wide">
+            <button type="button" class="btn danger" id="hh-delete" hidden>Delete</button>
+            <span style="flex:1"></span>
+            <button type="button" class="btn quiet" id="hh-cancel">Cancel</button>
+            <button type="submit" class="btn" id="hh-save">Add</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Settings -->
+  <section class="view" id="v-settings" hidden>
+    <h2 style="font-size: var(--step-2)">Settings</h2>
+
+    <div class="set-group">
+      <h3>People</h3>
+      <p class="sub">Whose things you track. With two or more, every account has an owner and Joint is added for things you share.</p>
+      <div id="people-list"></div>
+      <div class="set-row"><button class="btn quiet small" id="person-add">Add a person</button></div>
+    </div>
+
+    <div class="set-group">
+      <h3>Main currency</h3>
+      <p class="sub" id="currency-note"></p>
+      <div class="set-row"><select id="set-currency" aria-label="Main currency" style="width:auto"></select></div>
+    </div>
+
+    <div class="set-group">
+      <h3>Goal</h3>
+      <p class="sub">One figure to aim for, counted on what is within reach: cash, savings and investments. The home, cars and pensions are left out.</p>
+      <div class="set-row">
+        <label class="money" style="max-width:260px"><input id="goal-amount" inputmode="decimal" placeholder="For example 10m" aria-label="Goal amount"><span class="cur base">kr</span></label>
+        <button class="btn quiet small" id="goal-clear">Remove goal</button>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <h3>Display</h3>
+      <label class="set-check"><input type="checkbox" id="set-growth"> <span><b>Show growth as a yearly rate</b><br><span class="muted">Next to the big figure and on each account. Savings you put in count as growth.</span></span></label>
+      <label class="set-check"><input type="checkbox" id="set-student"> <span><b>Count student loans</b><br><span class="muted">CSN and UK student loans are paid back from income and written off late in life, so they are not like other debt. Untick to leave them out of every total. They stay on the accounts list.</span></span></label>
+      <label class="set-check"><input type="checkbox" id="set-household"> <span><b>Show the Household tab</b><br><span class="muted">Insurance, memberships and where the papers are, with a checklist of the usual cover in Sweden. Not counted in net worth.</span></span></label>
+      <label class="set-check"><input type="checkbox" id="set-hide"> <span><b>Hide figures</b><br><span class="muted">Blurs every amount, for sharing your screen. A button in the header brings them back.</span></span></label>
+      <div class="set-row" style="margin-top:14px">
+        <span>Theme</span>
+        <div class="seg" id="theme-toggle" role="group" aria-label="Theme">
+          <button data-v="auto" id="theme-auto">Follow the Mac</button>
+          <button data-v="light">Light</button>
+          <button data-v="dark">Dark</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <h3>Take-home pay</h3>
+      <p class="sub">What is paid into your accounts each month, after tax. Used to show how much of your pay you keep, and net worth in years of pay. Not counted in net worth.</p>
+      <div class="set-row" id="pay-inputs"></div>
+      <p class="muted" id="pay-est"></p>
+    </div>
+
+    <div class="set-group">
+      <h3>UK State Pension</h3>
+      <p class="sub">Shown on the Overview as qualifying years and what they pay. It needs 10 years to pay anything and 35 for the full amount. Check your record at gov.uk, Check your State Pension forecast.</p>
+      <label class="set-check"><input type="checkbox" id="sp-on"> <span><b>Track a UK State Pension</b></span></label>
+      <div class="set-row">
+        <label id="sp-who-f">Whose <select id="sp-who" style="width:auto"></select></label>
+        <label>Qualifying years <input id="sp-years" type="number" min="0" max="50" class="num-in" style="width:70px"></label>
+        <label>State Pension age <input id="sp-age" type="number" min="60" max="75" class="num-in" style="width:70px"></label>
+        <label>Born <input id="sp-born" type="number" min="1930" max="2020" class="num-in" style="width:80px" placeholder="year"></label>
+      </div>
+      <div class="set-row">
+        <label>Full rate this year £ <input id="sp-rate" inputmode="decimal" class="num-in" style="width:90px"> a week</label>
+        <label>Your gov.uk forecast £ <input id="sp-forecast" inputmode="decimal" class="num-in" style="width:90px" placeholder="optional"> a week</label>
+      </div>
+    </div>
+
+    <div class="set-group local-only">
+      <h3>Reminder</h3>
+      <p class="sub">A Mac notification at 7pm when you have not updated for a while. It runs on this Mac only, even when Net worth is closed.</p>
+      <label class="set-check"><input type="checkbox" id="set-remind"> <span><b>Remind me after</b>
+        <input id="remind-days" type="number" min="1" max="365" style="width:70px" class="num-in"> days without an update</span></label>
+      <div class="set-row"><button class="btn quiet small" id="remind-test">Send a test notification</button><span class="muted" id="remind-status"></span></div>
+    </div>
+
+    <div class="set-group">
+      <h3>Your data</h3>
+      <p class="sub local-only">Everything is kept in one file on this Mac, with a dated backup each day you make changes.</p>
+      <p class="sub web-only">Everything is kept in this browser, on this device, and nothing is sent anywhere. Clearing the browser's data for this site deletes it, so download a copy now and then.</p>
+      <p class="path local-only" id="data-path"></p>
+      <div class="set-row">
+        <button class="btn quiet small local-only" id="open-folder">Show in Finder</button>
+        <button class="btn quiet small" id="export-json">Download a copy</button>
+        <button class="btn quiet small" id="export-csv">Download as CSV</button>
+        <label class="btn quiet small web-only">Open a copy<input type="file" id="import-json" accept=".json,application/json" hidden></label>
+        <button class="btn danger small web-only" id="wipe">Delete everything</button>
+      </div>
+      <details class="move local-only">
+        <summary>Keep it somewhere else, for example Google Drive</summary>
+        <p class="sub">Paste the full path of a folder. The file is copied there, and Net worth uses it from then on.</p>
+        <div class="set-row"><input id="move-dir" class="note-in" style="max-width:520px" placeholder="/Users/you/Library/CloudStorage/GoogleDrive-…/My Drive/Net worth"><button class="btn quiet small" id="move-go">Use this folder</button></div>
+      </details>
+    </div>
+
+    <div class="set-group">
+      <h3>Add history from a spreadsheet</h3>
+      <p class="sub">A CSV file with one row per figure. Accounts that do not exist yet are created. <button class="link" id="csv-template">Download a template</button></p>
+      <input type="file" id="csv-file" accept=".csv,text/csv">
+      <div id="csv-preview"></div>
+    </div>
+
+    <div class="set-group">
+      <h3>Example</h3>
+      <p class="sub">See how it looks with two and a half years of made-up figures for two people. Your own figures are left alone.</p>
+      <div class="set-row"><button class="btn quiet small" id="demo-open">Show the example</button></div>
+    </div>
+  </section>
+
+  <footer class="web-foot web-only">
+    <p>Made by <a href="/">Matthew MacLaine</a>. Your figures stay in this browser. If you track something in another currency, the day's rate is fetched from the European Central Bank's reference rates through Frankfurter.</p>
+  </footer>
+</main>
+
+<div class="savebar" id="savebar">
+  <div class="wrap">
+    <div class="summary" id="save-summary"></div>
+    <input class="note-in" id="note" placeholder="Add a note, optional" aria-label="Note for this snapshot">
+    <div class="right">
+      <button class="btn quiet" id="discard">Clear</button>
+      <button class="btn" id="save">Save snapshot</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<dialog class="welcome" id="welcome" aria-labelledby="welcome-h">
+  <form method="dialog"><button class="close" aria-label="Close">×</button></form>
+  <h2 id="welcome-h">Net worth, a snapshot at a time</h2>
+  <p>Write down what your accounts, pensions, home and loans are worth whenever you like, and see how it changes over time. Your figures stay in this browser and nothing is sent anywhere.</p>
+  <p>You can look around with made-up figures first.</p>
+  <div class="actions">
+    <button class="btn" id="welcome-demo">Show the example</button>
+    <button class="btn quiet" id="welcome-blank">Start with a blank page</button>
+  </div>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
