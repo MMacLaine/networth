@@ -18,7 +18,7 @@ const OUT = path.join(SITE, 'networth');
 const URL = 'https://maclaine.se/networth/';
 
 const TITLE = 'Net worth · Track what you own and owe';
-const DESC = 'A free net worth tracker that runs in your browser. Write down what your accounts, pensions, home and loans are worth whenever you like, and see the history as charts. Your figures stay on your device.';
+const DESC = 'A free net worth tracker in your browser. Note what your accounts, pensions, home and loans are worth and see the history. Your figures stay on your device.';
 
 if (!existsSync(path.join(SITE, 'index.html'))) throw new Error(`No site checkout at ${SITE}`);
 
