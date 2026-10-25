@@ -69,7 +69,7 @@ ${themeSnippet}
 <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/fonts.css">
 <link rel="stylesheet" href="/assets/tokens.css?v=${tokensV}">
-<link rel="stylesheet" href="/assets/chrome.css">`;
+<link rel="stylesheet" href="/assets/chrome.css?v=2">`;
 
 const swap = (from, to) => {
   if (!html.includes(from)) throw new Error(`index.html no longer contains ${from}`);
@@ -79,7 +79,7 @@ swap('<html lang="en">', '<html lang="en" data-mode="web" data-look="lav">');
 swap('<title>Net worth</title>', head);
 // Versioned names, so a new page never runs with a cached older script
 swap('href="styles.css">', `href="styles.css?v=${hash(css)}">\n<link rel="stylesheet" href="web.css?v=${hash(webCss)}">`);
-swap('<script src="app.js">', `<script src="/assets/chrome.js"></script>\n<script src="app.js?v=${hash(js)}">`);
+swap('<script src="app.js">', `<script src="/assets/chrome.js?v=2"></script>\n<script src="app.js?v=${hash(js)}">`);
 // The site header is the page's banner, so the app's own bar becomes a plain block with the h1
 swap('<header class="app-top">', '<div class="app-top">');
 swap('</header>\n<div class="demo-bar"', '</div>\n<div class="demo-bar"');
