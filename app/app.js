@@ -1453,13 +1453,28 @@ hhForm.addEventListener('submit', e => {
 const darkMq = matchMedia('(prefers-color-scheme: dark)');
 function applySettings() {
   const st = db.settings;
-  const t = st.theme === 'auto' ? (darkMq.matches ? 'dark' : 'light') : st.theme;
-  document.documentElement.dataset.theme = t;
+  // On maclaine.se the site's header owns the theme (its `theme` key); locally it is a setting
+  if (!WEB) document.documentElement.dataset.theme = st.theme === 'auto' ? (darkMq.matches ? 'dark' : 'light') : st.theme;
   document.body.classList.toggle('private', !!st.hideFigures);
   document.querySelector('nav.tabs [data-go="household"]').hidden = !st.householdTab;
   $('unhide').hidden = !st.hideFigures;
 }
-darkMq.addEventListener('change', () => { if (db.settings.theme === 'auto') { applySettings(); render(); } });
+darkMq.addEventListener('change', () => {
+  if (WEB) { if (webTheme() === 'auto') setWebTheme('auto'); return; }
+  if (db.settings.theme === 'auto') { applySettings(); render(); }
+});
+// The web copy follows the site: no saved `theme` follows the device, a saved one wins
+function webTheme() { let t = null; try { t = localStorage.getItem('theme'); } catch {} return t === 'light' || t === 'dark' ? t : 'auto'; }
+function setWebTheme(v) {
+  const t = v === 'auto' ? (darkMq.matches ? 'dark' : 'light') : v;
+  if (v === 'auto') { try { localStorage.removeItem('theme'); } catch {} }
+  if (window.SiteChrome) window.SiteChrome.setTheme(t, v !== 'auto');
+  else { document.documentElement.dataset.theme = t; if (v !== 'auto') try { localStorage.setItem('theme', t); } catch {} }
+}
+const themeValue = () => WEB ? webTheme() : db.settings.theme;
+const syncThemeToggle = () => $('theme-toggle').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === themeValue()));
+let booted = false;
+document.addEventListener('themechange', () => { if (!booted) return; syncThemeToggle(); render(); });
 
 function renderLastUpdate() {
   const el = $('last-update');
@@ -1502,7 +1517,7 @@ async function renderSettings() {
   $('sp-rate').value = st.ukState.rate.toLocaleString(loc(), { minimumFractionDigits: 2 });
   $('sp-forecast').value = st.ukState.forecast ? st.ukState.forecast.toLocaleString(loc(), { minimumFractionDigits: 2 }) : '';
   $('remind-days').value = st.reminder.days;
-  $('theme-toggle').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === st.theme));
+  syncThemeToggle();
   $('demo-open').textContent = ui.demo ? 'Leave the example' : 'Show the example';
   if (WEB) return;
   try {
@@ -1534,6 +1549,7 @@ $('set-student').addEventListener('change', e => { db.settings.countStudent = e.
 $('unhide').addEventListener('click', () => { db.settings.hideFigures = false; saveSettings(); if (ui.view === 'settings') renderSettings(); });
 $('theme-toggle').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
+  if (WEB) { setWebTheme(b.dataset.v); syncThemeToggle(); return; }
   db.settings.theme = b.dataset.v; saveSettings(); render();
 });
 $('pay-inputs').addEventListener('change', e => {
@@ -1917,6 +1933,7 @@ async function boot() {
   setPeople();
   sortSnaps();
   applySettings();
+  booted = true;
   ownerButtons();
   const h = location.hash.slice(1);
   go(['update', 'history', 'household', 'settings'].includes(h) ? h : 'overview');

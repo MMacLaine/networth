@@ -85,8 +85,8 @@ button, input, select { font: inherit; color: inherit; }
 .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
 
 /* Header */
-header.top { border-bottom: 1px solid var(--rule); background: var(--paper); }
-header.top .wrap { display: flex; align-items: center; gap: 40px; height: 64px; }
+.app-top { border-bottom: 1px solid var(--rule); background: var(--paper); }
+.app-top .wrap { display: flex; align-items: center; gap: 40px; height: 64px; }
 .brand { font-weight: 700; font-size: var(--step-1); letter-spacing: -0.01em; }
 nav.tabs { display: flex; gap: 4px; height: 100%; }
 nav.tabs button {
@@ -96,8 +96,8 @@ nav.tabs button {
 nav.tabs button[aria-current="page"] { color: var(--ink); border-bottom-color: var(--ink); }
 nav.tabs button:hover { color: var(--ink); }
 .proto-note { margin-left: auto; font-size: var(--step--1); color: var(--ink-3); }
-.theme-btn { background: none; border: 1px solid var(--rule-strong); border-radius: 7px; padding: 5px 11px; cursor: pointer; font-size: var(--step--1); color: var(--ink-2); }
-.theme-btn:hover { color: var(--ink); }
+.chip-btn { background: none; border: 1px solid var(--rule-strong); border-radius: 7px; padding: 5px 11px; cursor: pointer; font-size: var(--step--1); color: var(--ink-2); }
+.chip-btn:hover { color: var(--ink); }
 .tag { display: inline-block; font-size: 12px; line-height: 1.4; border: 1px dashed var(--ink-3); border-radius: 4px; padding: 0 5px; margin-left: 6px; color: var(--ink-2); vertical-align: 1px; font-weight: 400; }
 .est { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--ink-2); margin-top: 3px; cursor: pointer; }
 .est input { margin: 0; accent-color: var(--ink); }
@@ -408,3 +408,5 @@ dialog.welcome p { margin: 0 0 12px; line-height: 1.5; color: var(--ink-2); }
 dialog.welcome .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
 dialog.welcome .close { position: absolute; top: 10px; right: 12px; border: 0; background: none; font-size: 22px; line-height: 1; color: var(--ink-3); cursor: pointer; padding: 6px; }
 dialog.welcome .close:hover { color: var(--ink); }
+
+.view-title { font-size: var(--step-2); }

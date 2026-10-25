@@ -36,12 +36,12 @@ Settings, Add history from a spreadsheet takes a CSV with the columns `date, acc
 
 | | |
 |---|---|
-| `app/` | The page: `index.html`, `styles.css`, `app.js` and the font |
+| `app/` | The page: `index.html`, `styles.css`, `app.js` and the font. `web.css` is the maclaine.se look, loaded by the web copy only |
 | `server.mjs` | The local server: app, data file, backups, exchange rates, reminder. Listens on this Mac only |
 | `Net Worth.command` | Double click to open it |
 | `scripts/background.sh` | Switch background running on or off |
 | `scripts/reminder.mjs` | The daily reminder check |
-| `scripts/publish-site.mjs` | Builds the browser-only copy for maclaine.se |
+| `scripts/publish-site.mjs` | Builds the browser-only copy for maclaine.se, with the site's header, footer, fonts and theme |
 
 ## Licence
 

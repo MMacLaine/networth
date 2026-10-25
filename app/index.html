@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<header class="top">
+<header class="app-top">
   <div class="wrap">
     <div class="brand">Net worth</div>
     <nav class="tabs" aria-label="Sections">
@@ -20,7 +20,7 @@
     </nav>
     <div class="head-right">
       <span class="last-update" id="last-update"></span>
-      <button class="theme-btn" id="unhide" hidden>Show figures</button>
+      <button class="chip-btn" id="unhide" hidden>Show figures</button>
     </div>
   </div>
 </header>
@@ -49,6 +49,7 @@
     </div>
 
     <div id="ov-body">
+    <div class="ov-chart">
     <div class="chart-bar">
       <div class="seg" id="view-toggle" role="group" aria-label="Chart">
         <button data-v="total" aria-pressed="true">Total</button>
@@ -69,6 +70,7 @@
     <div class="chart" id="main-chart"></div>
     <div id="main-table" hidden></div>
     <p class="sub" id="hero-est" style="margin-top:14px" hidden></p>
+    </div>
 
     <div class="block goal" id="goal-block" hidden></div>
 
@@ -141,7 +143,7 @@
   <section class="view" id="v-update" hidden>
     <div class="update-head">
       <div>
-        <h2 style="font-size: var(--step-2)">Update figures</h2>
+        <h2 class="view-title">Update figures</h2>
         <p class="sub">Type what has changed. Anything left blank keeps its last figure.</p>
       </div>
       <label class="rate">Figures as of
@@ -180,13 +182,13 @@
 
   <!-- History -->
   <section class="view" id="v-history" hidden>
-    <h2 style="font-size: var(--step-2)">History</h2>
+    <h2 class="view-title">History</h2>
     <p class="sub">Every time you pressed save. Open one to see what changed, correct a figure or delete it.</p>
     <div class="h-list" id="h-list"></div>
   </section>
   <!-- Household -->
   <section class="view" id="v-household" hidden>
-    <h2 style="font-size: var(--step-2)">Household</h2>
+    <h2 class="view-title">Household</h2>
     <p class="sub">Insurance, memberships and where the important papers are. Not counted in net worth.</p>
     <div class="stats" id="hh-stats"></div>
     <div class="block" style="margin-top:36px">
@@ -223,7 +225,7 @@
 
   <!-- Settings -->
   <section class="view" id="v-settings" hidden>
-    <h2 style="font-size: var(--step-2)">Settings</h2>
+    <h2 class="view-title">Settings</h2>
 
     <div class="set-group">
       <h3>People</h3>
