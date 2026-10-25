@@ -41,6 +41,9 @@ const siteHead = cut(/<header class="site-head[\s\S]*?<\/header>/, 'the site hea
 const siteFoot = cut(/<footer class="site-foot"[\s\S]*?<\/footer>/, 'the site footer');
 const skip = cut(/<a href="#main" class="skip-link">[^<]*<\/a>/, 'the skip link');
 const themeSnippet = (await fs.readFile(path.join(SITE, '_dev', 'theme-snippet.html'), 'utf8')).trim();
+// The tokens version the site's pages use (verify.js gate 8b), read from the homepage.
+const tokensV = (home.match(/\/assets\/tokens\.css\?v=(\d+)/) || [])[1];
+if (!tokensV) throw new Error('index.html no longer links /assets/tokens.css?v=N');
 
 const head = `<title>${TITLE}</title>
 <meta name="description" content="${DESC}">
@@ -60,7 +63,7 @@ const head = `<title>${TITLE}</title>
 ${themeSnippet}
 <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/fonts.css">
-<link rel="stylesheet" href="/assets/tokens.css?v=2">
+<link rel="stylesheet" href="/assets/tokens.css?v=${tokensV}">
 <link rel="stylesheet" href="/assets/chrome.css">`;
 
 const swap = (from, to) => {
