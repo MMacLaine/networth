@@ -11,6 +11,7 @@ import path from 'node:path';
 import os from 'node:os';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const APP = path.join(ROOT, 'app');
@@ -32,12 +33,16 @@ const css = await fs.readFile(path.join(APP, 'styles.css'));
 const webCss = await fs.readFile(path.join(APP, 'web.css'));
 let html = await fs.readFile(path.join(APP, 'index.html'), 'utf8');
 
-// The site's shared header, footer and theme snippet, taken from the live homepage and
+// The site's shared footer and theme snippet, taken from the live homepage and
 // _dev/theme-snippet.html, so the copy always matches them (and the link baker still finds
 // its <!-- links:... --> blocks). The local app never gets these.
 const home = await fs.readFile(path.join(SITE, 'index.html'), 'utf8');
 const cut = (re, what) => { const m = home.match(re); if (!m) throw new Error(`The homepage no longer has ${what}`); return m[0]; };
-const siteHead = cut(/<header class="site-head[\s\S]*?<\/header>/, 'the site header');
+// The header comes from the site's generator for this page's path, so Net Worth is marked
+// as the current page under Things I build (the homepage's copy marks nothing).
+const links = createRequire(import.meta.url)(path.join(SITE, 'site-links.js'));
+const siteHead = (links.chromeHeader({ lang: 'en', path: '/networth/' }).match(/<header class="site-head[\s\S]*?<\/header>/) || [])[0];
+if (!siteHead) throw new Error('site-links.js chromeHeader no longer returns a header');
 const siteFoot = cut(/<footer class="site-foot"[\s\S]*?<\/footer>/, 'the site footer');
 const skip = cut(/<a href="#main" class="skip-link">[^<]*<\/a>/, 'the skip link');
 const themeSnippet = (await fs.readFile(path.join(SITE, '_dev', 'theme-snippet.html'), 'utf8')).trim();
