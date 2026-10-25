@@ -63,7 +63,8 @@ const head = `<title>${TITLE}</title>
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="${IMAGE}">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/assets/site/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/site/apple-touch-icon.png">
 <meta name="theme-color" content="#BCC6BD" data-light="#BCC6BD" data-dark="#242A25">
 ${themeSnippet}
 <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
