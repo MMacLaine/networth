@@ -17,11 +17,14 @@ const APP = path.join(ROOT, 'app');
 const SITE = process.argv[2] || path.join(os.homedir(), 'personal website');
 const OUT = path.join(SITE, 'networth');
 const URL = 'https://maclaine.se/networth/';
+// The share image lives in the site checkout (made by _local/redesign/og/make-og.mjs there)
+const IMAGE = 'https://maclaine.se/images/og/networth.png';
 
 const TITLE = 'Net worth · Track what you own and owe';
 const DESC = 'A free net worth tracker in your browser. Note what your accounts, pensions, home and loans are worth and see the history. Your figures stay on your device.';
 
 if (!existsSync(path.join(SITE, 'index.html'))) throw new Error(`No site checkout at ${SITE}`);
+if (!existsSync(path.join(SITE, 'images', 'og', 'networth.png'))) throw new Error('The share image images/og/networth.png is missing from the site checkout');
 
 const hash = buf => crypto.createHash('sha256').update(buf).digest('hex').slice(0, 10);
 const js = await fs.readFile(path.join(APP, 'app.js'));
@@ -47,7 +50,11 @@ const head = `<title>${TITLE}</title>
 <meta property="og:url" content="${URL}">
 <meta property="og:title" content="${TITLE}">
 <meta property="og:description" content="${DESC}">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="${IMAGE}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${IMAGE}">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta name="theme-color" content="#BCC6BD" data-light="#BCC6BD" data-dark="#242A25">
 ${themeSnippet}
